@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Scan</title>
+<style>
+  body{
+    margin:0;
+    background:black;
+    color:#00ff88;
+    font-family: monospace;
+    overflow:hidden;
+  }
+  #terminal{
+    padding:20px;
+    height:80vh;
+    overflow-y:auto;
+    white-space:pre-line;
+  }
+  .bar{
+    width:90%;
+    height:15px;
+    border:1px solid #00ff88;
+    margin:10px auto;
+  }
+  .progress{
+    height:100%;
+    width:0%;
+    background:#00ff88;
+  }
+</style>
+</head>
+<body>
+
+<div id="terminal"></div>
+
+<div class="bar">
+  <div class="progress" id="progress"></div>
+</div>
+
+<audio id="sound" src="beep.mp3"></audio>
+
+<script>
+const lines = [
+  "Initializing system scan...",
+  "Checking device status...",
+  "Loading modules...",
+  "Analyzing usage patterns...",
+  "Decrypting nothing important...",
+  "Compiling totally useless data...",
+  "Finalizing..."
+];
+
+let i = 0;
+let percent = 0;
+const term = document.getElementById("terminal");
+const bar = document.getElementById("progress");
+const sound = document.getElementById("sound");
+
+function typeLine(text, cb){
+  let j = 0;
+  let interval = setInterval(()=>{
+    term.innerHTML += text[j] || "";
+    j++;
+    if(j > text.length){
+      clearInterval(interval);
+      term.innerHTML += "\n";
+      cb && cb();
+    }
+  }, 20);
+}
+
+function run(){
+  if(i < lines.length){
+    typeLine(lines[i], ()=>{
+      i++;
+      percent += Math.floor(Math.random()*15)+10;
+      if(percent>100) percent=100;
+      bar.style.width = percent + "%";
+
+      sound.volume = 0.15;
+      sound.play().catch(()=>{});
+
+      setTimeout(run, 500);
+    });
+  } else {
+    typeLine("=== RESULT ===", ()=>{
+      typeLine("พบความลับ: คนนี้นอนดึก + ติดเกม 😂", ()=>{
+        typeLine(">> ล้อเล่นนะ ไม่ได้ทำอะไรจริง <<");
+      });
+    });
+  }
+}
+
+run();
+</script>
+
+</body>
+</html>
